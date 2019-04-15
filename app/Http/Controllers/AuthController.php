@@ -24,6 +24,7 @@ class AuthController extends Controller
             $newUser->password = bcrypt($request->password);
             $newUser->email = $request->email;
             $newUser->save();
+            auth()->login($newUser);
         } else {
             return response()->json(['error' => $validator]);
         }
