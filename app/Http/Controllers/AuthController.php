@@ -38,6 +38,12 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    public function logout()
+    {
+        auth('api')->logout();
+        return "Successfully logged out";
+    }
+
     public function respondWithToken($token)
     {
         return response()->json([
