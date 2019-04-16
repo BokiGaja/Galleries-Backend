@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Gallery;
+use App\Http\Services\GalleryService;
+use App\Http\Services\ValidationService;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -36,7 +38,13 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = ValidationService::validateGallery($request);
+        if (!is_string($validator))
+        {
+            GalleryService::createGallery($request);
+        } else {
+            return response()->json(['error' => $validator]);
+        }
     }
 
     /**

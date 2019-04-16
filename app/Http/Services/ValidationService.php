@@ -8,6 +8,17 @@ use \Illuminate\Support\Facades\Validator;
 
 class ValidationService
 {
+    public static function validateInput($data, $rules)
+    {
+        $validator = Validator::make($data->all(), $rules);
+
+        if ($validator->fails())
+        {
+            return $validator->errors()->first();
+        } else {
+            return true;
+        }
+    }
     public static function validateUser($userData)
     {
         $rules = [
@@ -17,13 +28,17 @@ class ValidationService
             'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*\d).+$/',
             'password_confirmation'=>'sometimes|required_with:password',
         ];
-        $validator = Validator::make($userData->all(), $rules);
+        return ValidationService::validateInput($userData, $rules);
+    }
 
-        if ($validator->fails())
-        {
-            return $validator->errors()->first();
-        } else {
-            return true;
-        }
+    public static function validateGallery($galleryData)
+    {
+        $rules = [
+            'title' => 'required|min:2|max:255',
+            'description' => 'max: 1000',
+            'user_id' => 'required'
+        ];
+        return ValidationService::validateInput($galleryData, $rules);
+
     }
 }

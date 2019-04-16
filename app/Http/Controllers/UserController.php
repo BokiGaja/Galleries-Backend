@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Gallery::where('user_id', $user->id)->with('user')->get();
+        return Gallery::where('user_id', $user->id)->with('user')->orderBy('id', 'DESC')->get();
     }
 
     /**
