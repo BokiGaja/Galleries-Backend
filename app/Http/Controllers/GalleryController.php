@@ -15,7 +15,7 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        return Gallery::with('user')->get();
+        return Gallery::with('user')->orderBy('id', 'DESC')->get();
     }
 
     /**
