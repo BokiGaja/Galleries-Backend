@@ -14,11 +14,10 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-    public function register(Request$request)
+    public function register(Request $request)
     {
         $validator = ValidationService::validateUser($request);
-        if (!is_string($validator))
-        {
+        if (!is_string($validator)) {
             AuthService::registerUser($request);
         } else {
             return response()->json(['error' => $validator]);

@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Gallery;
 use App\Http\Services\CreationService;
-use App\Http\Services\GalleryService;
-use App\Http\Services\PictureService;
 use App\Http\Services\ValidationService;
 use App\Picture;
-use App\User;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
@@ -21,16 +18,6 @@ class GalleryController extends Controller
     public function index()
     {
         return Gallery::with('user', 'pictures')->orderBy('id', 'DESC')->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -61,17 +48,6 @@ class GalleryController extends Controller
     public function show(Gallery $gallery)
     {
         return $gallery->with('user', 'pictures', 'comments')->find($gallery->id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Gallery $gallery
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Gallery $gallery)
-    {
-        //
     }
 
     /**
