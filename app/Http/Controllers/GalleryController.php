@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Gallery;
+use App\Http\Services\CreationService;
 use App\Http\Services\GalleryService;
 use App\Http\Services\PictureService;
 use App\Http\Services\ValidationService;
@@ -42,9 +43,9 @@ class GalleryController extends Controller
     {
         $validator = ValidationService::validateGallery($request);
         if (!is_string($validator)) {
-            $newGallery = GalleryService::createGallery($request);
+            $newGallery = CreationService::createGallery($request);
             foreach ($request->images as $image) {
-                PictureService::createPicture($image, $newGallery->id);
+                CreationService::createPicture($image, $newGallery->id);
             }
         } else {
             return response()->json(['error' => $validator]);
@@ -88,7 +89,7 @@ class GalleryController extends Controller
                 Picture::where('imageUrl', $image)->delete();
             }
             foreach ($request->images as $image) {
-                PictureService::createPicture($image, $gallery->id);
+                CreationService::createPicture($image, $gallery->id);
             }
 
             $gallery->update($request->all());

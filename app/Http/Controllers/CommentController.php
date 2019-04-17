@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Http\Services\CommentService;
+use App\Http\Services\CreationService;
 use App\Http\Services\ValidationService;
 use Illuminate\Http\Request;
 
@@ -40,8 +41,7 @@ class CommentController extends Controller
         $validator = ValidationService::validateComment($request);
         if (!is_string($validator))
         {
-            $newComment = CommentService::createComment($request);
-            return $newComment;
+            CreationService::createComment($request);
         } else {
             return response()->json(['error' => $validator]);
         }
