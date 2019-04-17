@@ -60,7 +60,7 @@ class GalleryController extends Controller
      */
     public function show(Gallery $gallery)
     {
-        return $gallery->with('user', 'pictures')->find($gallery->id);
+        return $gallery->with('user', 'pictures', 'comments')->find($gallery->id);
     }
 
     /**

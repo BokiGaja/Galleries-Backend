@@ -53,9 +53,10 @@ class CommentController extends Controller
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show($id)
     {
-        //
+        $comments = Comment::where('gallery_id', $id)->with('user')->get();
+        return $comments;
     }
 
     /**
