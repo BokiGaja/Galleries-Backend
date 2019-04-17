@@ -43,4 +43,14 @@ class ValidationService
         return ValidationService::validateInput($galleryData, $rules);
     }
 
+    public static function validateComment($commentData)
+    {
+        $rules = [
+            'content' => 'required|max:1000',
+            'gallery_id' => 'required',
+            'user_id' => 'required'
+        ];
+        return ValidationService::validateInput($commentData, $rules);
+    }
+
 }

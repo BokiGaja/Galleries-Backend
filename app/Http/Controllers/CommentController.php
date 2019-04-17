@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\PictureService;
+use App\Comment;
+use App\Http\Services\CommentService;
 use App\Http\Services\ValidationService;
-use App\Picture;
 use Illuminate\Http\Request;
 
-class PictureController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,16 +37,23 @@ class PictureController extends Controller
      */
     public function store(Request $request)
     {
-//
+        $validator = ValidationService::validateComment($request);
+        if (!is_string($validator))
+        {
+            $newComment = CommentService::createComment($request);
+            return $newComment;
+        } else {
+            return response()->json(['error' => $validator]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Picture  $picture
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Picture $picture)
+    public function show(Comment $comment)
     {
         //
     }
@@ -54,10 +61,10 @@ class PictureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Picture  $picture
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Picture $picture)
+    public function edit(Comment $comment)
     {
         //
     }
@@ -66,10 +73,10 @@ class PictureController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Picture  $picture
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Picture $picture)
+    public function update(Request $request, Comment $comment)
     {
         //
     }
@@ -77,10 +84,10 @@ class PictureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Picture  $picture
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Picture $picture)
+    public function destroy(Comment $comment)
     {
         //
     }

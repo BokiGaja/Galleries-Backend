@@ -15,6 +15,5 @@ class GalleryService
         $gallery->description = $galleryData->description;
         $gallery->user_id = $galleryData->user_id;
         $gallery->save();
-        return $gallery;
     }
 }

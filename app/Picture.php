@@ -14,4 +14,9 @@ class Picture extends Model
     {
         return $this->belongsTo(Gallery::class, 'gallery_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'gallery_id');
+    }
 }
