@@ -18,7 +18,7 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        return Gallery::with('user')->orderBy('id', 'DESC')->get();
+        return Gallery::with('user', 'pictures')->orderBy('id', 'DESC')->get();
     }
 
     /**
@@ -60,7 +60,7 @@ class GalleryController extends Controller
      */
     public function show(Gallery $gallery)
     {
-        return $gallery->with('user')->find($gallery->id);
+        return $gallery->with('user', 'pictures')->find($gallery->id);
     }
 
     /**
