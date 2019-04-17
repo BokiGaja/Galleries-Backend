@@ -6,6 +6,7 @@ use App\Gallery;
 use App\Http\Services\GalleryService;
 use App\Http\Services\PictureService;
 use App\Http\Services\ValidationService;
+use App\Picture;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -34,17 +35,15 @@ class GalleryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $validator = ValidationService::validateGallery($request);
-        if (!is_string($validator))
-        {
+        if (!is_string($validator)) {
             $newGallery = GalleryService::createGallery($request);
-            foreach ($request->images as $image)
-            {
+            foreach ($request->images as $image) {
                 PictureService::createPicture($image, $newGallery->id);
             }
         } else {
@@ -55,7 +54,7 @@ class GalleryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Gallery  $gallery
+     * @param \App\Gallery $gallery
      * @return \Illuminate\Http\Response
      */
     public function show(Gallery $gallery)
@@ -66,7 +65,7 @@ class GalleryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Gallery  $gallery
+     * @param \App\Gallery $gallery
      * @return \Illuminate\Http\Response
      */
     public function edit(Gallery $gallery)
@@ -77,19 +76,31 @@ class GalleryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Gallery  $gallery
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Gallery $gallery
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Gallery $gallery)
     {
-        //
+        $validator = ValidationService::validateGallery($request);
+        if (!is_string($validator)) {
+            foreach ($request->images as $image) {
+                Picture::where('imageUrl', $image)->delete();
+            }
+            foreach ($request->images as $image) {
+                PictureService::createPicture($image, $gallery->id);
+            }
+
+            $gallery->update($request->all());
+        } else {
+            return response()->json(['error' => $validator]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Gallery  $gallery
+     * @param \App\Gallery $gallery
      * @return \Illuminate\Http\Response
      */
     public function destroy(Gallery $gallery)
