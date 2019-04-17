@@ -38,17 +38,9 @@ class ValidationService
             'description' => 'max: 1000',
             'user_id' => 'required',
             'images' => 'required|array|min:1',
-            'images.*' => ['required','url', 'regex:/[.](jpe?g|png)/'],
+            'images.*' => ['required','url', 'regex:/[.](jpe?g|png)$/'],
         ];
         return ValidationService::validateInput($galleryData, $rules);
     }
 
-    public static function validatePicture($pictureData)
-    {
-        $rules = [
-            'imageUrl' => ['required', 'regex:/[.](jpe?g|png)/'],
-            'gallery_id' => 'required'
-        ];
-        return ValidationService::validateInput($pictureData, $rules);
-    }
 }
