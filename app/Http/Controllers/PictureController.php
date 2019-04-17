@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PictureService;
+use App\Http\Services\ValidationService;
 use App\Picture;
 use Illuminate\Http\Request;
 
@@ -35,7 +37,7 @@ class PictureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//
     }
 
     /**
