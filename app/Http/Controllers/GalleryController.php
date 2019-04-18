@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Gallery;
-use App\Http\Services\CreationService;
+use App\Http\Services\GalleryService;
+use App\Http\Services\PictureService;
 use App\Http\Services\ValidationService;
 use App\Picture;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
-    public function __construct()
+    public function __construct(GalleryService $galleryService, PictureService $pictureService, ValidationService $validationService)
     {
+        $this->galleryService = $galleryService;
+        $this->pictureService = $pictureService;
+        $this->validationService = $validationService;
         $this->middleware('auth:api', ['except' => ['index', 'show']]);
     }
     /**
@@ -32,15 +36,16 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = ValidationService::validateGallery($request);
+        $validator = $this->validationService->validateGallery($request);
         if (!is_string($validator)) {
-            $newGallery = CreationService::createGallery($request);
+            $newGallery = $this->galleryService->createGallery($request);
             foreach ($request->images as $image) {
-                CreationService::createPicture($image, $newGallery->id);
+                $this->pictureService->createPicture($image, $newGallery->id);
             }
-        } else {
-            return response()->json(['error' => $validator]);
+            return response()->json($newGallery, 200);
         }
+
+        return response()->json(['error' => $validator], 400);
     }
 
     /**
@@ -63,19 +68,19 @@ class GalleryController extends Controller
      */
     public function update(Request $request, Gallery $gallery)
     {
-        $validator = ValidationService::validateGallery($request);
+        $validator = $this->validationService->validateGallery($request);
         if (!is_string($validator)) {
             foreach ($request->images as $image) {
                 Picture::where('imageUrl', $image)->delete();
             }
             foreach ($request->images as $image) {
-                CreationService::createPicture($image, $gallery->id);
+                $this->pictureService->createPicture($image, $gallery->id);
             }
-
             $gallery->update($request->all());
-        } else {
-            return response()->json(['error' => $validator]);
+            return response()->json($gallery, 200);
         }
+
+        return response()->json(['error' => $validator], 400);
     }
 
     /**

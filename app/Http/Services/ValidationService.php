@@ -30,7 +30,7 @@ class ValidationService
         return $this->validateInput($userData, $rules);
     }
 
-    public static function validateGallery($galleryData)
+    public function validateGallery($galleryData)
     {
         $rules = [
             'title' => 'required|min:2|max:255',

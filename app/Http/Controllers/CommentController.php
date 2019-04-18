@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
-use App\Http\Services\CreationService;
+use App\Http\Services\CommentService;
 use App\Http\Services\ValidationService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function __construct(CommentService $commentService, ValidationService $validationService)
+    {
+        $this->commentService = $commentService;
+        $this->validationService = $validationService;
+        $this->middleware('auth:api', ['except' => ['show']]);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -17,9 +23,9 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = ValidationService::validateComment($request);
+        $validator = $this->validationService->validateComment($request);
         if (!is_string($validator)) {
-            CreationService::createComment($request);
+            $this->commentService->createComment($request);
         } else {
             return response()->json(['error' => $validator]);
         }

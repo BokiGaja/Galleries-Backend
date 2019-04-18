@@ -12,7 +12,7 @@ class AuthController extends Controller
     {
         $this->validationService = $validationService;
         $this->authService = $authService;
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'getCounter']]);
     }
 
     public function register(Request $request)
