@@ -3,12 +3,11 @@
 namespace App\Http\Services;
 
 
-use App\Movie;
 use \Illuminate\Support\Facades\Validator;
 
 class ValidationService
 {
-    public static function validateInput($data, $rules)
+    public function validateInput($data, $rules)
     {
         $validator = Validator::make($data->all(), $rules);
 
@@ -19,7 +18,7 @@ class ValidationService
             return true;
         }
     }
-    public static function validateUser($userData)
+    public function validateUser($userData)
     {
         $rules = [
             'first_name' => 'required',
@@ -28,7 +27,7 @@ class ValidationService
             'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*\d).+$/',
             'password_confirmation'=>'sometimes|required_with:password',
         ];
-        return ValidationService::validateInput($userData, $rules);
+        return $this->validateInput($userData, $rules);
     }
 
     public static function validateGallery($galleryData)

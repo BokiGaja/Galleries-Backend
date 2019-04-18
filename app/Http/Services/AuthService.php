@@ -7,7 +7,7 @@ use App\User;
 
 class AuthService
 {
-    public static function registerUser($userData)
+    public function registerUser($userData)
     {
         $newUser = new User();
         $newUser->first_name = $userData->first_name;
@@ -18,12 +18,13 @@ class AuthService
         auth()->login($newUser);
     }
 
-    public static function loginUser($userData)
+    public function loginUser($userData)
     {
         $credentials = $userData->only(['email', 'password']);
         if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Wrong credentials']);
+            return null;
         }
+
         return AuthService::respondWithToken($token);
     }
 
@@ -40,11 +41,5 @@ class AuthService
     public static function guard()
     {
         return \Auth::Guard('api');
-    }
-
-    public static function logoutUser()
-    {
-        auth('api')->logout();
-        return "Successfully logged out";
     }
 }
