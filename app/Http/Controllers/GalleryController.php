@@ -68,19 +68,22 @@ class GalleryController extends Controller
      */
     public function update(Request $request, Gallery $gallery)
     {
-        $validator = $this->validationService->validateGallery($request);
-        if (!is_string($validator)) {
-            foreach ($request->images as $image) {
-                Picture::where('imageUrl', $image)->delete();
+        if (auth()->user()->id == $gallery->user_id)
+        {
+            $validator = $this->validationService->validateGallery($request);
+            if (!is_string($validator)) {
+                foreach ($request->images as $image) {
+                    Picture::where('imageUrl', $image)->delete();
+                }
+                foreach ($request->images as $image) {
+                    $this->pictureService->createPicture($image, $gallery->id);
+                }
+                $gallery->update($request->all());
+                return response()->json($gallery, 200);
             }
-            foreach ($request->images as $image) {
-                $this->pictureService->createPicture($image, $gallery->id);
-            }
-            $gallery->update($request->all());
-            return response()->json($gallery, 200);
+            return response()->json(['error' => $validator], 400);
         }
-
-        return response()->json(['error' => $validator], 400);
+        return response()->json(400);
     }
 
     /**
