@@ -39,17 +39,17 @@ class ValidationService
             'images' => 'required|array|min:1',
             'images.*' => ['required','url', 'regex:/[.](jpe?g|png)$/'],
         ];
-        return ValidationService::validateInput($galleryData, $rules);
+        return $this->validateInput($galleryData, $rules);
     }
 
-    public static function validateComment($commentData)
+    public function validateComment($commentData)
     {
         $rules = [
             'content' => 'required|max:1000',
             'gallery_id' => 'required',
             'user_id' => 'required'
         ];
-        return ValidationService::validateInput($commentData, $rules);
+        return $this->validateInput($commentData, $rules);
     }
 
 }

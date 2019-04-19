@@ -15,6 +15,7 @@ class CommentController extends Controller
         $this->validationService = $validationService;
         $this->middleware('auth:api', ['except' => ['show']]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -27,7 +28,7 @@ class CommentController extends Controller
         if (!is_string($validator)) {
             $this->commentService->createComment($request);
         } else {
-            return response()->json(['error' => $validator]);
+            return response()->json(['error' => $validator], 400);
         }
     }
 
@@ -42,6 +43,7 @@ class CommentController extends Controller
         $comments = Comment::where('gallery_id', $id)->with('user')->get();
         return $comments;
     }
+
     /**
      * Remove the specified resource from storage.
      *
