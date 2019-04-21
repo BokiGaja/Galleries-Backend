@@ -68,12 +68,10 @@ class GalleryController extends Controller
      */
     public function update(Request $request, Gallery $gallery)
     {
-        if (auth()->user()->id == $gallery->user_id)
-        {
             $validator = $this->validationService->validateGallery($request);
             if (!is_string($validator)) {
                 foreach ($request->images as $image) {
-                    Picture::where('imageUrl', $image)->delete();
+                    Picture::where('gallery_id', $gallery->id)->delete();
                 }
                 foreach ($request->images as $image) {
                     $this->pictureService->createPicture($image, $gallery->id);
@@ -82,7 +80,6 @@ class GalleryController extends Controller
                 return response()->json($gallery, 200);
             }
             return response()->json(['error' => $validator], 400);
-        }
         return response()->json(400);
     }
 
