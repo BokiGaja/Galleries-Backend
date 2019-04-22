@@ -1,4 +1,4 @@
-# Laravel-Cars
+# Laravel-Galleries
     - Clone this project
     - Go to the folder application using cd command on your cmd or terminal
     - Run composer install on your cmd or terminal
